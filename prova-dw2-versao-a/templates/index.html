@@ -26,23 +26,30 @@
          - nao havendo nenhum, a frase:  Nenhum palestrante cadastrado.
        ================================================================== -->
 
-  <ul id="lista">
-    {% for item in palestrantes %}
-      <li>
-        <strong>{{ item.nome }}</strong>
-        — {{ item.tema }}
-        — {{ item.minutos }}
 
-        <a href="{{ url_for('palestrante.editar', id=item.id) }}">editar</a>
+<p>Total de itens: {{ eventos | length }}</p>
 
-        <form method="post" action="{{ url_for('palestrante.excluir', id=item.id) }}">
+{% if palestrante %}
+
+<ul id="lista">
+  {% for item in palestrantes %}
+    <li>
+      {{ item.nome | upper }} - {{ item.tem }} - {{ item.minutos }}
+    
+      <a href="{{ url_for('palestrante.editar', id=item.id) }}">editar</a>
+
+      <form method="post" action="{{ url_for('palestrante.excluir', id=item.id) }}">
           <button type="submit">excluir</button>
         </form>
-      </li>
-    {% endfor %}
-  </ul>
 
-  <p class="escopos">
+    </li>
+{% endfor %}
+</ul>
+{% else %}
+<p>Nenhum registro cadastrado ainda.</p>
+{% endif %}
+
+<p class="escopos">
     Visitas nesta sessão: <strong id="contador">{{ session["visitas"] }}</strong>
   </p>
 
