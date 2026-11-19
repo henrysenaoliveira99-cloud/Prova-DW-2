@@ -35,11 +35,16 @@ def index():
 
     return render_template("index.html", palestrantes=PalestranteDAO.listar())
 
+contador = {"total": 0}
 
 # Edicao - GET mostra o formulario preenchido
 @palestrante_bp.route("/editar/<int:id>", methods=["GET", "POST"])
 def editar(id):
     palestrante = PalestranteDAO.buscar_por_id(id)
+
+def contador():
+    session["visitas"] = session.get("visitas", 0) + 1
+
 
     # ===== ITEM 4 ====================================================
     # O formulario de edicao e enviado para esta rota por POST, mas nada
