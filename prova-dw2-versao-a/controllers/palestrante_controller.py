@@ -8,6 +8,13 @@ from dao.palestrante_dao import PalestranteDAO
 
 palestrante_bp = Blueprint("palestrante", __name__)
 
+@evento_bp.before_request
+def exigir_login():
+    if not session.get("usuario_id"):
+        flash("Faca login para continuar.")
+        return redirect(url_for("auth.login"))
+
+
 
 # ===== ITEM 5 ========================================================
 # Hoje qualquer pessoa abre as paginas deste Blueprint sem entrar no
