@@ -28,6 +28,8 @@ def index():
         flash("Palestrante cadastrado.")
         return redirect(url_for("palestrante.index"))
 
+    def contador():
+        session["visitas"] = session.get("visitas", 0) + 1
     # ===== ITEM 3 ====================================================
     # Conte aqui, na SESSAO, quantas vezes esta pessoa abriu a listagem.
     # A chave deve se chamar "visitas". O template ja exibe o valor.
@@ -42,9 +44,15 @@ contador = {"total": 0}
 def editar(id):
     palestrante = PalestranteDAO.buscar_por_id(id)
 
-def contador():
-    session["visitas"] = session.get("visitas", 0) + 1
-
+{% extends "base.html" %}
+{% block titulo %}Editar Registro{% endblock %}
+{% block conteudo %}
+<h2>Editar</h2>
+<form method="post">
+    <input name="nome" value="{{ palestrante.nome }}" required>
+    <button type="submit">Salvar</button>
+    </form>
+{% endblock %}
 
     # ===== ITEM 4 ====================================================
     # O formulario de edicao e enviado para esta rota por POST, mas nada
@@ -61,3 +69,6 @@ def excluir(id):
     PalestranteDAO.excluir(palestrante)
     flash("Palestrante excluido.")
     return redirect(url_for("palestrante.index"))
+
+
+
