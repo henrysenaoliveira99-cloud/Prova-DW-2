@@ -34,7 +34,17 @@ function desenharLista(dados) {
 
 if (botaoAtualizar && lista) {
 
-  botaoAtualizar.addEventListener("click", function () {
+  botaoAtualizar.addEventListener("click", function atualizarPorFetch(d, dados)) {
+    
+fetch("/api/eventos/" + id, {
+  method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(dados)
+  })
+.then(function (r) { return r.json(); })
+.then(function (atualizado) { console.log("Atualizado:", atualizado); });
+}
+
 
     // ===== ITEM 8 ===================================================
     // Ao clicar no botao, peca a lista a API, no endereco
