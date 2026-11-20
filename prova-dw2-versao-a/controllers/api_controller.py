@@ -29,6 +29,13 @@ def listar():
 
     return jsonify(lista)
 
+@api_bp.route("/palestrante/<int:id>", methods=["GET"])
+def api_buscar(id):
+    evento = EventoDAO.buscar_por_id(id)
+    if not evento:
+        return jsonify({"erro": "Registro nao encontrado."}), 404
+    return jsonify(evento.para_dicionario()), 200
+
 
 # ===== ITEM 7 ========================================================
 # Escreva aqui a rota GET /api/palestrantes/<id>, que devolve UM registro.
