@@ -9,39 +9,37 @@ from dao.usuario_dao import UsuarioDAO
 
 auth_bp = Blueprint("auth", __name__)
 
-
 @auth_bp.route("/login", methods=["GET", "POST"])
 def login():
-    if request.method == "POST":
-        usuario = UsuarioDAO.buscar_por_email(request.form["email"])
+if request.method == "POST":
+usuario = UsuarioDAO.buscar_por_email(request.form["email"])
+if usuario and check_password_hash(usuario.senha_hash,
+request.form["senha"]):
+session["usuario_id"] = usuario.id
+session["usuario nome"] = usuario.nome
 
-        if usuario and check_password_hash(usuario.senha_hash,
-                                           request.form["senha"]):
-            session["usuario_id"] = usuario.id
-            session["usuario_nome"] = usuario.nome
-            return redirect(url_for("palestrante.index"))
-
-        flash("E-mail ou senha invalidos.")
-
-    return render_template("login.html")
+return redirect(url_for("palestrante.index"))
+flash("E-mail ou senha invalidos.")
+return render_template("cadastro.html")
 
 
 @auth_bp.route("/cadastro", methods=["GET", "POST"])
 def cadastro():
     if request.method == "POST":
-        if UsuarioDAO.buscar_por_email(request.form["email"]):
+        senha_hash = generate_password_hash(request.form["senha"])
+
+if UsuarioDAO.buscar_por_email(request.form["email"]):
             flash("Ja existe uma conta com este e-mail.")
             return render_template("cadastro.html")
 
-        usuario = Usuario(
+usuario = Usuario(
             nome=request.form["nome"],
             email=request.form["email"],
             senha_hash=request.form["senha"]
-        )
-        UsuarioDAO.salvar(usuario)
+)
+UsuarioDAO.salvar(usuario)
         flash("Conta criada. Faca login para continuar.")
-        return redirect(url_for("auth.login"))
-
+        
     return render_template("cadastro.html")
 
 
