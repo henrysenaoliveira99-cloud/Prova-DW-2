@@ -42,6 +42,23 @@ def api_buscar(id):
 # Se o id nao existir, a resposta e 404 com {"erro": "Palestrante nao encontrado."}.
 # =====================================================================
 
+function excluirPorFetch(id) {
+    fetch("/api/eventos/" + id, { method: "DELETE" })
+        .then(function (r) {
+            if (r.ok) {
+                console.log("Excluido! Status:", r.status); // 204
+            }
+            return r.text(); // nunca use r.json() no DELETE 204!
+        });
+}
+
+@evento_bp.route("/excluir/<int:id>", methods=["POST"])
+def excluir(id):
+    evento = EventoDAO.buscar_por_id(id)
+    EventoDAO.excluir(evento)
+    flash("Registro excluido com sucesso.")
+    return redirect(url_for("evento.index"))
+
 
 # ===== ITEM 9 ========================================================
 # Escreva aqui a rota DELETE /api/palestrantes/<id>, que remove UM registro.
